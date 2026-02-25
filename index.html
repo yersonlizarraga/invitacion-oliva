@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expediente Judicial</title>
+
+<style>
+
+:root{
+    --dorado:#C9A227;
+    --oscuro:#0e0e0e;
+    --gris:#444;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+        linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)),
+        url("https://images.unsplash.com/photo-1605806616949-1e87b487fc2f?q=80&w=1920") center/cover no-repeat fixed;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== REJAS ===== */
+.rejas{
+    position:fixed;
+    inset:0;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(255,255,255,0.08) 0px,
+        rgba(255,255,255,0.08) 6px,
+        transparent 6px,
+        transparent 90px
+    );
+    pointer-events:none;
+    transition:1.2s ease;
+}
+
+.rejas.abiertas{
+    transform:translateX(-100%);
+    opacity:0;
+}
+
+/* ===== LUZ CINEMATOGRÁFICA ===== */
+.luz{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    background:radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15), transparent 60%);
+    animation:moverLuz 6s infinite alternate;
+}
+
+@keyframes moverLuz{
+    from{background-position:20% 30%;}
+    to{background-position:70% 60%;}
+}
+
+/* ===== PANTALLA INICIAL ===== */
+
+.center-screen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.confirm-card{
+    background:rgba(0,0,0,0.9);
+    border:2px solid var(--dorado);
+    border-radius:18px;
+    padding:45px;
+    text-align:center;
+    max-width:600px;
+    width:100%;
+    box-shadow:0 0 70px rgba(201,162,39,0.6);
+    animation:fadeIn 1s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.9);}
+    to{opacity:1; transform:scale(1);}
+}
+
+.confirm-card h2{
+    color:var(--dorado);
+    margin-bottom:15px;
+    letter-spacing:2px;
+}
+
+.btn{
+    padding:14px 28px;
+    border-radius:30px;
+    border:none;
+    font-weight:bold;
+    cursor:pointer;
+    margin:15px;
+    font-size:16px;
+    transition:0.3s;
+}
+
+.yes{
+    background:var(--dorado);
+    color:black;
+}
+
+.no{
+    background:var(--gris);
+    color:white;
+}
+
+.btn:hover{
+    transform:scale(1.05);
+}
+
+.hidden{
+    display:none;
+}
+
+/* ===== INVITACIÓN ===== */
+
+.card{
+    position:relative;
+    max-width:900px;
+    width:90%;
+    margin:60px auto;
+    padding:40px;
+    border-radius:20px;
+    border:2px solid var(--dorado);
+    box-shadow:0 0 70px rgba(201,162,39,0.4);
+    animation:aparecer 1s ease;
+    overflow:hidden;
+    color:white;
+}
+
+/* FONDO NORMAL DEL CARD */
+.card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(10,10,10,0.95);
+    z-index:-1;
+}
+
+/* CUANDO SE ACEPTA → MARTILLO COMO FONDO DEL CARD */
+.card.martillo-fondo::before{
+    background:
+        linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
+        url("https://images.unsplash.com/photo-1589216532372-1c2a367900d9?q=80&w=1920") center/cover no-repeat;
+    animation:fadeMartillo 1s ease;
+}
+
+@keyframes fadeMartillo{
+    from{opacity:0;}
+    to{opacity:1;}
+}
+
+@keyframes aparecer{
+    from{opacity:0; transform:translateY(40px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.titulo{
+    text-align:center;
+    font-size:32px;
+    color:var(--dorado);
+    letter-spacing:3px;
+}
+
+.subtitulo{
+    text-align:center;
+    margin-bottom:25px;
+    color:#bbb;
+}
+
+.info{
+    line-height:1.8;
+    font-size:18px;
+}
+
+.info h3{
+    margin-top:25px;
+    margin-bottom:10px;
+    color:var(--dorado);
+}
+
+.highlight{
+    color:var(--dorado);
+    font-weight:bold;
+}
+
+iframe{
+    width:100%;
+    height:300px;
+    border-radius:10px;
+    margin-top:15px;
+    border:none;
+}
+
+.footer{
+    margin-top:30px;
+    text-align:center;
+    font-size:20px;
+    color:var(--dorado);
+    letter-spacing:2px;
+}
+
+.iconos{
+    font-size:26px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="rejas" id="rejas"></div>
+<div class="luz"></div>
+
+<!-- CONFIRMACIÓN -->
+<div class="center-screen" id="pantallaConfirmacion">
+    <div class="confirm-card">
+        <div class="iconos">⚖️ ⛓️ 🔒 👮</div>
+        <h2>NOTIFICACIÓN JUDICIAL</h2>
+        <p style="margin:20px 0;">
+            Usted ha sido formalmente citado a cumplir condena en el cumpleaños del abogado.<br><br>
+            ¿Acepta su sentencia?
+        </p>
+        <button class="btn yes" onclick="confirmar()">⚖️ Acepto la condena</button>
+        <button class="btn no" id="noBtn">⛓️ Intentar escapar</button>
+    </div>
+</div>
+
+<!-- INVITACIÓN -->
+<div id="invitacionCompleta" class="hidden">
+<div class="card" id="cardInvitacion">
+
+    <div class="iconos">📜 ⚖️ ⛓️ 🔐</div>
+
+    <div class="titulo">EXPEDIENTE CONFIDENCIAL</div>
+    <div class="subtitulo">Caso: Celebración Bajo Custodia</div>
+
+    <div class="info">
+
+        Se le acusa formalmente de asistir al cumpleaños de 
+        <span class="highlight">Juan Adrian Oliva Gutiérrez</span>.
+
+        <h3>📅 Fecha del Juicio</h3>
+        <p><span class="highlight">Sábado 28 de Febrero</span></p>
+        <p><span class="highlight">Hora:</span> 7:00 P.M.</p>
+
+        <h3>📍 Lugar del Delito</h3>
+        <p>"Villa del Sol" Nuevo Barraza – Trujillo</p>
+
+        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3949.8899382349705!2d-78.9968183249916!3d-8.112688091916496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zOMKwMDYnNDUuNyJTIDc4wrA1OSczOS4zIlc!5e0!3m2!1ses!2spe!4v1772048210534!5m2!1ses!2spe"></iframe>
+
+    </div>
+
+    <div class="footer">
+        🚨 OBLIGATORIO: Llevar trago o regalo 🚨
+    </div>
+
+</div>
+</div>
+
+<script>
+
+const noBtn = document.getElementById("noBtn");
+
+function moverBoton(){
+    const x = Math.random() * 200 - 100;
+    const y = Math.random() * 200 - 100;
+    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+noBtn.addEventListener("mouseover", moverBoton);
+noBtn.addEventListener("touchstart", moverBoton);
+
+function confirmar(){
+    document.getElementById("pantallaConfirmacion").classList.add("hidden");
+    document.getElementById("invitacionCompleta").classList.remove("hidden");
+    document.getElementById("rejas").classList.add("abiertas");
+
+    // ACTIVAR MARTILLO COMO FONDO DEL CARD
+    document.getElementById("cardInvitacion").classList.add("martillo-fondo");
+
+    window.scrollTo(0,0);
+}
+
+</script>
+
+</body>
+</html>
